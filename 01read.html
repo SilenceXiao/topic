@@ -29,3 +29,13 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 	php artisan tinker
 6.3 数据库重置
 	php artisan migrate:refresh
+
+	old()函数帮助在模板中显示旧输入数据 
+	<input type="password" name="password" class="form-control" value="{{ old('password') }}">
+6.4  数据验证
+	validate($reuquest,['rule'=>'xx|xx']) 
+	方法接收两个参数，第一个参数为用户的输入数据，第二个参数为该输入数据的验证规则。
+	验证多个条件时，则可使用 | 对验证规则进行分割。 
+
+	Laravel 为了安全考虑，会让我们提供一个 token（令牌）来防止我们的应用受到 CSRF（跨站请求伪造）的攻击
+	在form表单中加入 {{ csrf_field() }} 即可
