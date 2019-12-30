@@ -34,6 +34,10 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 
 	old()函数帮助在模板中显示旧输入数据 
 	<input type="password" name="password" class="form-control" value="{{ old('password') }}">
+	
+	return redirect()->back()->withInput();
+	使用 withInput() 后模板里 old('email') 将能获取到上一次用户提交的内容
+
 6.4  数据验证
 	validate($reuquest,['rule'=>'xx|xx']) 
 	方法接收两个参数，第一个参数为用户的输入数据，第二个参数为该输入数据的验证规则。
