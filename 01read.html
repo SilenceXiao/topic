@@ -64,3 +64,7 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 
 7.5 记住我
 	Auth::attempt([],$request->has('remember')) 方法可接收两个参数 1 -> 用户数组 2 -> 是否记住我的布尔值
+
+8.2 更新用户
+	用隐藏域来伪造patch请求 method_field('PATCH')
+	{{ method_field('PATCH') }} -> <input type="hidden" name="_method" value="PATCH">

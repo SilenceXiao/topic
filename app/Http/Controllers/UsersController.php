@@ -50,6 +50,10 @@ class UsersController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:50',
+            // 'name' => [
+            //     'required|max:6',
+            //     Rule::unique('users')->ignore($user->id)
+            // ],
             'password' => 'nullable|confirmed|min:6'
         ]);
 
@@ -57,7 +61,7 @@ class UsersController extends Controller
         if($request->password){
             $user->password = bcrypt($request->password);
         }
-        
+
         $user->save();
 
         session()->flash('success','更新成功');
