@@ -45,3 +45,22 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 
 	Laravel 为了安全考虑，会让我们提供一个 token（令牌）来防止我们的应用受到 CSRF（跨站请求伪造）的攻击
 	在form表单中加入 {{ csrf_field() }} 即可
+
+7.2 会话
+	使用 Illuminate\Http\Request 实例来接收用户输入的数据 $request->xxxx
+
+	使用Auth::attempt([]) 来完成用户验证
+	->验证email->如果找到->先将用户提交的密码进行哈希加密->然后与数据库密码进行匹配
+	->匹配成功后会创建一个【会话】给当前用户,同时种下一个laravel_session的 HTTP Cookie,用此Cookie记录用户登录状态
+	->如果email 匹配不成功 返回 false
+	->密码匹配不成功 返回 false
+
+7.3 登录
+	Auth::check() 检测用户登录是否已经登录
+
+7.4 使用隐藏域来伪造delete请求 method_field('DELETE')
+	{{ method_field('DELETE') }}
+	Auth::logout() 实现用户退出
+
+7.5 记住我
+	Auth::attempt([],$request->has('remember')) 方法可接收两个参数 1 -> 用户数组 2 -> 是否记住我的布尔值

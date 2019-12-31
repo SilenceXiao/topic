@@ -23,7 +23,7 @@ class SessionsController extends Controller
     		'password' =>'required',
     	]);
 
-    	if(Auth::attempt($user)){ //匹配用户成功
+    	if(Auth::attempt($user, $request->has('remember'))){ //匹配用户成功
     		session()->flash('success','登陆成功');
     		return redirect()->route('users.show',[Auth::user()]);
 
