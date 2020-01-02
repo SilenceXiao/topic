@@ -8,6 +8,15 @@ use Auth;
 
 class SessionsController extends Controller
 {
+
+	public function __construct()
+    {
+        $this->middleware('guest',[
+            'only' => ['create'],
+        ]);
+    }
+
+
     //
     public function create()
     {
@@ -28,7 +37,9 @@ class SessionsController extends Controller
 
     	if(Auth::attempt($user, $request->has('remember'))){ //匹配用户成功
     		session()->flash('success','登陆成功');
-    		return redirect()->route('users.show',[Auth::user()]);
+    		$fallback = route('users.show', Auth::user());
+    		// return redirect()->route('users.show',[Auth::user()]);
+           	return redirect()->intended($fallback);
 
     	}else{//匹配用户失败
 

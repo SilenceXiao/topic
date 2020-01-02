@@ -68,3 +68,33 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 8.2 更新用户
 	用隐藏域来伪造patch请求 method_field('PATCH')
 	{{ method_field('PATCH') }} -> <input type="hidden" name="_method" value="PATCH">
+
+8.3 权限系统
+	1.创建授权策略
+		a.限制未登录的用户更改资料
+			通过Laravel 中间件 Middleware 提供的过滤机制来验证
+			中间件的文件放在项目的 app\Http\Middleware文件夹中
+			middleware(name,action) 接收两个参数，中间件名称,过滤的动作
+			except,only 类似于 黑名单，白名单两种方式指定不过滤，或过滤动作，首选 except 黑名单 
+
+		b.限制登录的用户只能改自己的资料
+			Laravel 中可以使用 授权策略 (Policy) 来对用户的操作权限进行验证
+			所有生成的授权策略文件都会被放置在 app/Policies 文件夹下。
+	2.注册授权策略
+		laravel提供两种注册授权策略，1.手动指定，2 5.8版本后的--自动授权注册
+		自动授权默认会假设 Model 模型文件直接存放在 app 目录下，鉴于我们已将模型存放目录修改为 app/Models，
+		修改自动授权规则, app/Providers/AuthServiceProvider.php boot()方法自定义
+			Gate::guessPolicyNamesUsing(function ($modelClass) {
+	            // 动态返回模型对应的策略名称，如：// 'App\Models\User' => 'App\Policies\UserPolicy',
+	            return 'App\Policies\\'.class_basename($modelClass).'Policy';
+	        });
+	    默认的 App\Http\Controllers\Controller 类包含了 Laravel 的 AuthorizesRequests trait
+	    此 trait 提供了 authorize()方法 快速授权指定策略，
+	    使用 authorize(name,data) 验证用户授权策略 第一个参数 策略名称 二参数 验证数据
+
+	3.重定向问题 
+		redirect() 实例提供了一个 intended()方法，可将页面重定向到上一次请求尝试访问的页面上，
+		并接收一个默认跳转地址参数，当上一次请求记录为空时，跳转到默认地址上。
+	    $fallback = route('users.show', Auth::user());
+        return redirect()->intended($fallback);
+	4.   
