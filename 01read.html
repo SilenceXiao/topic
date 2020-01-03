@@ -97,4 +97,37 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 		并接收一个默认跳转地址参数，当上一次请求记录为空时，跳转到默认地址上。
 	    $fallback = route('users.show', Auth::user());
         return redirect()->intended($fallback);
-	4.   
+
+8.4 用户列表
+	1.compact('users')；该函数会自动去匹配变量名为users的变量，然后组装成 key=>value 的键值对数组（users=>$users）;
+	2.假数据生产（测试数据）
+		a.对要生成假数据的模型指定字段进行赋值 - 『模型工厂』；  
+		b.批量生成假数据模型 - 『数据填充』；
+		1.模型工厂
+			Laravel 集成 Faker拓展包
+			database/factories/UserFactory.php 文件为指定模型的每个字段设置随机值。
+		2.数据填充
+			使用Seeder 类来填充测试数据 文件放于 database/seeds 目录下
+			database/seeds/UsersTableSeeder.php 创建测试文件
+			使用  factory() 这个辅助函数来生成一个使用假数据的用户对象。
+			$users = factory(User::class)->times(50)->make();
+			User::insert($users->makeVisible(['password', 'remember_token'])->toArray());
+			times() 接受一个参数用于指定要创建的模型数量
+			make() 创建一个集合
+			makeVisible() 方法临时显示 User 模型里指定的隐藏属性 $hidden
+			使用insert()将生成的假数据批量插入
+			最后在 DatabaseSeeder （database/seeds/DatabaseSeeder.php）中调用 call 方法来指定我们要运行假数据填充的文件。
+
+			public function run(){
+		        Model::unguard();
+
+		        $this->call(UsersTableSeeder::class);//此处
+
+		        Model::reguard();
+		    }
+		    为了批量填充数据，当然要暂时性关闭安全保护，填充完毕后重新打开保护。
+		    unguard() 用于解除对于数据库的填充限制，reguard() 则是重新加上这个限制
+	3. 分页
+		$users = User::paginate(10);
+		页面上渲染 {!! $users->render() !!}
+
