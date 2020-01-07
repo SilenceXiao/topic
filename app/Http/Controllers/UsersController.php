@@ -20,7 +20,7 @@ class UsersController extends Controller
         ]);
     }
 
-    //
+    //用户列表
     public function index()
     {
         // $users = User::all();
@@ -28,19 +28,19 @@ class UsersController extends Controller
         return view('users.index',compact('users'));
     }
 
-    //注册
+    //注册界面
     public function create()
     {
     	return view('users.create');
     }
 
-    //
+    //用户信息
     public function show(User $user)
     {
     	return view('users.show',compact('user'));
     }
 
-    //
+    //注册
     public function store(Request $request)
     {
     	// dd($request);
@@ -61,14 +61,14 @@ class UsersController extends Controller
     	return redirect()->route('users.show', [$user]);
     }
 
-    //
+    //编辑界面
     public function edit(User $user)
     {
         $this->authorize('update',$user);
         return view('users.edit',compact('user'));
     }
 
-    //
+    //更新
     public function update(User $user,Request $request)
     {
         $this->authorize('update',$user);
@@ -90,5 +90,15 @@ class UsersController extends Controller
 
         session()->flash('success','更新成功');
         return redirect()->route('users.show', $user->id);
+    }
+
+
+    //删除
+    public function destroy(User $user)
+    {
+        $this->authorize('destroy',$user);
+        $user->delete();
+        session()->flash('success','删除成功');
+        return back();
     }
 }

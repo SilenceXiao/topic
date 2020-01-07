@@ -76,6 +76,7 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 			中间件的文件放在项目的 app\Http\Middleware文件夹中
 			middleware(name,action) 接收两个参数，中间件名称,过滤的动作
 			except,only 类似于 黑名单，白名单两种方式指定不过滤，或过滤动作，首选 except 黑名单 
+			Auth 中间件提供的 guest 选项，用于指定一些只允许未登录用户访问的动作
 
 		b.限制登录的用户只能改自己的资料
 			Laravel 中可以使用 授权策略 (Policy) 来对用户的操作权限进行验证
@@ -130,4 +131,15 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 	3. 分页
 		$users = User::paginate(10);
 		页面上渲染 {!! $users->render() !!}
+8.5 删除用户
+	
+	删除用户的动作，有两个逻辑需要提前考虑：
+		1.只有当前登录用户为管理员才能执行删除操作；
+		2.删除的用户对象不是自己（即使是管理员也不能自己删自己）。
+	
+	Laravel 授权策略提供了 @can Blade 命令 配合【授权策略类 app/Policies/UserPolicy.php】进行授权判断
+	resources/views/users/_user.blade.php
+	->	@can('destroy', $user)
+			<button type="submit" class="btn btn-sm btn-danger delete-btn">删除</button>
+		@endcan
 
