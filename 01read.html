@@ -136,10 +136,13 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 	删除用户的动作，有两个逻辑需要提前考虑：
 		1.只有当前登录用户为管理员才能执行删除操作；
 		2.删除的用户对象不是自己（即使是管理员也不能自己删自己）。
-	
+
 	Laravel 授权策略提供了 @can Blade 命令 配合【授权策略类 app/Policies/UserPolicy.php】进行授权判断
 	resources/views/users/_user.blade.php
 	->	@can('destroy', $user)
 			<button type="submit" class="btn btn-sm btn-danger delete-btn">删除</button>
 		@endcan
+
+9 账户激活
+	
 
