@@ -144,5 +144,30 @@ git checkout -f -- 丢弃暂存的区的文件（add后未commit的）
 		@endcan
 
 9 账户激活
-	
+	1.生成令牌
+		用户的激活令牌需要在用户创建（注册）之前就先生成好
+		可以通过监听模型被创建之前的 creating【该方法是由 Eloquent 模型触发的一个事件】 方法来做到
+		Eloquent 模型默认提供了多个事件
+			creating 用于监听模型被创建之前的事件，created 用于监听模型被创建之后的事件。
+		在Model层 app/Models/User.php
+			use Illuminate\Support\Str;
+
+			public static function boot()
+		    {
+		        parent::boot();
+
+		        static::creating(function ($user) { //监听事件
+		            $user->activation_token = Str::random(10);
+		        });
+		    }
+		boot() 方法会在用户模型类完成初始化之后进行加载
+
+	2.发送邮件
+		Mail::send(a,b,function(){});
+		第一个参数是包含邮件消息的视图名称。
+		第二个参数是要传递给该视图的数据数组。
+		最后是一个用来接收邮件消息实例的闭包回调，我们可以在该回调中自定义邮件消息的发送者、接收者、邮件主题等信息。
+	3.Model 查询 
+		firstOrFail() 取第一个用户,否则会返回404响应
+		
 
