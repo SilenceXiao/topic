@@ -38,13 +38,15 @@ class UsersController extends Controller
     //用户信息
     public function show(User $user)
     {
-    	return view('users.show',compact('user'));
+        $statuses = $user->statuses()
+            ->orderBy('created_at','desc')
+            ->paginate(30);
+    	return view('users.show',compact('user','statuses'));
     }
 
     //注册
     public function store(Request $request)
     {
-    	// dd($request);
     	$this->validate($request, [
     		'name' => 'required|max:50',
     		'email' => 'required|email|unique:users|max:255',

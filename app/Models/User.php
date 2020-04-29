@@ -39,6 +39,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function statuses(){
+        return $this->hasMany(Status::class,'user_id');
+    }
+
     //生产用户头像链接
     public function gravatar($size = '100')
     {   
