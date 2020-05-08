@@ -8,6 +8,7 @@ class Status extends Model
 {
 
     protected $table = 'statuses';
+    protected $fillable = ['content'];
     
     //反向一对多
     public function user(){
