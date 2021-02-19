@@ -43,6 +43,43 @@ class User extends Authenticatable
         return $this->hasMany(Status::class,'user_id');
     }
 
+    //获取粉丝
+    public function followers(){
+        return $this->belongsToMany(User::class, 'followers','user_id','follower_id')
+            ->withTimestamps();
+    }
+
+    //获取关注人列表
+    public function followings(){
+        return $this->belongsToMany(User::class, 'followers','follower_id','user_id')
+            ->withTimestamps();
+    }
+
+    //加关注
+    public function follow($user_ids){
+        if( !is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+
+        $this->followings()->sync($user_ids,false);
+    }
+
+    //取关注
+    public function unfollow($user_ids){
+        if(!is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+
+    }
+
+    //获取关注人列表
+    public function isFollowing($user_id){
+        $this->followings()->contains($user_id);
+    }
+
+
+
     //生产用户头像链接
     public function gravatar($size = '100')
     {   
