@@ -75,7 +75,7 @@ class User extends Authenticatable
 
     //获取关注人列表
     public function isFollowing($user_id){
-        $this->followings->contains($user_id);
+        return $this->followings->contains($user_id);
     }
 
 

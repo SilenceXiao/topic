@@ -1,8 +1,6 @@
 @can('follow', $user)
   <div class="text-center mt-2 mb-4">
-      {{ dump(Auth::user()->id) }}
-      {{ dump($user->id) }}
-    @if (Auth::user()->isFollowing($user->id))
+    @if(Auth::user()->isFollowing($user->id))
       <form action="{{ route('followers.destroy', $user->id) }}" method="post">
         {{ csrf_field() }}
         {{ method_field('DELETE') }}
