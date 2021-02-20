@@ -56,12 +56,12 @@ class User extends Authenticatable
     }
 
     //加关注
-    public function follow($user_ids){
-        if( !is_array($user_ids)){
+    public function follow($user_ids)
+    {
+        if ( ! is_array($user_ids)) {
             $user_ids = compact('user_ids');
         }
-
-        $this->followings()->sync($user_ids,false);
+        $this->followings()->sync($user_ids, false);
     }
 
     //取关注
@@ -75,7 +75,7 @@ class User extends Authenticatable
 
     //获取关注人列表
     public function isFollowing($user_id){
-        $this->followings()->contains($user_id);
+        $this->followings->contains($user_id);
     }
 
 
